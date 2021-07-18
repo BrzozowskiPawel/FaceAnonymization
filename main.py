@@ -1,9 +1,10 @@
 import cv2
-# First, you need to load the previously downloaded classifier available in the openCV repository
-face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+# First, you need to load the previously downloaded classifier available in the openCV repository.
+# You can use different type of haarcascade here.
+face_cascade = cv2.CascadeClassifier('default.xml')
 
 # Here the image is loaded for the test of correct operation
-# VideoCapture() takes filename as argument or you can type 0 to use webcam.
+# VideoCapture() takes filename as argument or you can type device index.
 captured_video = cv2.VideoCapture('test_video.mp4')
 
 while True:
@@ -28,7 +29,7 @@ while True:
     # As we can read on the website listed on the bottom of this code,
     # faces contains a list of coordinates for the rectangular regions where faces were found.
     # We use these coordinates to draw the rectangles in our frame.
-    faces = face_cascade.detectMultiScale(gray, 1.1, 8)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 16)
 
 
     # Create a rectangle around a founded face.
@@ -44,6 +45,7 @@ while True:
     # thickness of -1 px will fill the rectangle shape by the specified color.
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+
     # Display the output
     # cv2.imshow() takes 2 arguments: window_name, frame.
     cv2.imshow('Face Detection - try on video', frame)
@@ -55,6 +57,7 @@ while True:
         break
 # Release the VideoCapture object
 captured_video.release()
+cv2.destroyAllWindows()
 
 # Additional information
 # This is part of tutorial founded here:
