@@ -5,7 +5,7 @@ face_cascade = cv2.CascadeClassifier('default.xml')
 
 # Here the image is loaded for the test of correct operation
 # VideoCapture() takes filename as argument or you can type device index.
-captured_video = cv2.VideoCapture('test_video.mp4')
+captured_video = cv2.VideoCapture(0)
 
 while True:
     # Getting frame from video.
@@ -44,7 +44,8 @@ while True:
     # Thickness -> 2: It is the thickness of the rectangle border line in px,
     # thickness of -1 px will fill the rectangle shape by the specified color.
     for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+        face = cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+        face[y:y+h,x:x+h] = cv2.medianBlur(face[y:y+h,x:x+h], 35)
 
     # Display the output
     # cv2.imshow() takes 2 arguments: window_name, frame.
