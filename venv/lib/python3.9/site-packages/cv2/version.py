@@ -1,4 +1,4 @@
 opencv_version = "4.5.3.56"
-contrib = False
+contrib = True
 headless = False
 ci_build = True

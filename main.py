@@ -1,35 +1,41 @@
 import cv2
-# First, you need to load the previously downloaded classifier available in the openCV repository.
-# You can use different type of haarcascade here.
-face_cascade = cv2.CascadeClassifier('default.xml')
+import mediapipe as mp
+import time
+
+# From now we will be using mediapipe instead of haarcascade.
 
 # Here the image is loaded for the test of correct operation
 # VideoCapture() takes filename as argument or you can type device index.
-captured_video = cv2.VideoCapture(0)
+captured_video = cv2.VideoCapture('test_video.mp4')
 
+# Defining initial value for previousTIme (this is necessary for FPS)
+previousTime = 0
+
+mpFaceDetection = mp.solutions.face_detection
+mpDraw = mp.solutions.drawing_utils
+faceDetection = mpFaceDetection.FaceDetection(0.8)
 while True:
     # Getting frame from video.
     # This function returns 2 variables: 1. is flag if frame was read correctly, 2. is frame
-    #
-    _, frame = captured_video.read()
+    success, frame = captured_video.read()
 
-    # Next steps are the same as before
 
-    # In order for the algorithm to work properly, we need to present the frame in shades of gray.
-    # CV2 processes images in BGR which means: Blue, Green and Red.
-    # We need to scale this image down to shades of gray.
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    # In order for the algorithm to work properly, we need to present the frame in RGB model.
+    # We are using cv2 function to scale img from BGR to RGB.
+    imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = faceDetection.process(imgRGB)
 
-    # The function responsible for detecting the face.
-    # It accepts 3 arguments which in turn mean: the input frame (gray scale), scaleFactor and minNeighbours.
-    # scaleFactor specifies how much the image size is reduced with each scale.
-    # minNeighbours specifies how many neighbors each candidate rectangle should have to retain it.
-    # Last to parameters could be different, you should try to find best for your case.
-    # --------------------------------------------------------------------------------------------------
-    # As we can read on the website listed on the bottom of this code,
-    # faces contains a list of coordinates for the rectangular regions where faces were found.
-    # We use these coordinates to draw the rectangles in our frame.
-    faces = face_cascade.detectMultiScale(gray, 1.1, 16)
+    # In code below we are showing face's bounding box and also percentage certainty that a face has been detected.
+    if results.detections:
+        for id, detection in enumerate(results.detections):
+            bounding_boxClass = detection.location_data.relative_bounding_box
+            frame_height, frame_width, frame_channel = frame.shape
+            bounding_box = int(bounding_boxClass.xmin * frame_width), int(bounding_boxClass.ymin * frame_height), \
+                           int(bounding_boxClass.width * frame_width), int(bounding_boxClass.height * frame_height)
+
+            cv2.rectangle(frame, bounding_box, (255, 0, 255), 2)
+            cv2.putText(frame, f"{int(detection.score[0] * 100)}%", (bounding_box[0], bounding_box[1] - 20),
+                        cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 2)
 
 
     # Create a rectangle around a founded face.
@@ -43,9 +49,13 @@ while True:
     # for BGR, we pass a tuple. eg: (255, 0, 0) for blue color.
     # Thickness -> 2: It is the thickness of the rectangle border line in px,
     # thickness of -1 px will fill the rectangle shape by the specified color.
-    for (x, y, w, h) in faces:
-        face = cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
-        face[y:y+h,x:x+h] = cv2.medianBlur(face[y:y+h,x:x+h], 35)
+
+
+    # Calcute FPS
+    currentTime = time.time()
+    fps = 1 / (currentTime - previousTime)
+    previousTime = currentTime
+    cv2.putText(frame, f"fps{int(fps)}", (20, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 0), 2)
 
     # Display the output
     # cv2.imshow() takes 2 arguments: window_name, frame.
