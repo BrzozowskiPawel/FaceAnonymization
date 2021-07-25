@@ -1,17 +1,25 @@
-# This file uses mediapipe for face detection.
+# This file SSD model for face detection.
+# To find out more about this visit: https://arxiv.org/abs/1512.02325
 import cv2
-import mediapipe as mp
+import numpy as np
 import time
 
-# Setting for all parameters
+# SETTING OF PARAMETERS
+MINIMUM_CONFIDENCE = 0.4
 SHOW_CONFIDENCE = True
 SHOW_FPS = True
 BLUR_FACE = True
-MINIMUM_CERTANITY = 0.5
+
+# https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/deploy.prototxt
+prototxt_path = "weights/deploy.prototxt.txt"
+# https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20180205_fp16/res10_300x300_ssd_iter_140000_fp16.caffemodel
+model_path = "weights/res10_300x300_ssd_iter_140000_fp16.caffemodel"
+# Loading model, method that takes the model architecture and weights as arguments:
+model = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
 
 # Here the image is loaded for the test of correct operation
 # VideoCapture() takes filename as argument or you can type device index.
-captured_video = cv2.VideoCapture(0)
+captured_video = cv2.VideoCapture("test_video.mp4")
 
 # Defining initial value for previousTIme (this is necessary for FPS)
 previousTime = 0
@@ -20,53 +28,68 @@ while True:
     # This function returns 2 variables: 1. is flag if frame was read correctly, 2. is frame
     success, frame = captured_video.read()
 
-    # In order for the algorithm to work properly, we need to present the frame in RGB model.
-    # We are using cv2 function to scale img from BGR to RGB.
-    imgRGB = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = mp.solutions.face_detection.FaceDetection(MINIMUM_CERTANITY).process(imgRGB)
+    # Getting width and height of the image (as we are working on video, image is just a frame from video).
+    h, w = frame.shape[:2]
+    # Gaussian blur kernel size depends on width and height of original image
+    kernel_width = (w // 7) | 1
+    kernel_height = (h // 7) | 1
+    # Preprocess the image: resize and performs mean subtraction
+    blob = cv2.dnn.blobFromImage(frame, 1.0, (300, 300), (104.0, 177.0, 123.0))
+    # Set the image into the input of the neural network
+    model.setInput(blob)
+    # Perform inference and get the result
+    output = np.squeeze(model.forward())
 
-    # In code below we are showing face's bounding box and also percentage certainty that a face has been detected.
-    if results.detections:
+    for i in range(0, output.shape[0]):
+        # Getting confidence value
+        confidence = output[i, 2]
 
-        for id, detection in enumerate(results.detections):
-            # Getting all data about frame
-            frame_height, frame_width, frame_channel = frame.shape
+        # Get the surrounding box coordinates and upscale them to original image
+        box = output[i, 3:7] * np.array([w, h, w, h])
+        # convert to integers
+        start_x, start_y, end_x, end_y = box.astype(np.int32)
+        # get the face image
+        face = frame[start_y: end_y, start_x: end_x]
 
-            # Getting basic data for box around face. All of it is inside of detection.
-            x = int(detection.location_data.relative_bounding_box.xmin * frame_width)
-            y = int(detection.location_data.relative_bounding_box.ymin * frame_height)
-            w = int(detection.location_data.relative_bounding_box.width * frame_width)
-            h = int(detection.location_data.relative_bounding_box.height * frame_height)
-
-
-            if BLUR_FACE:
-                # Create a rectangle around a founded face.
-                # cv2.rectangle() Parameters:
-                # Image -> img: It is the image on which rectangle is to be drawn.
-                # Start_point -> (x, y): It is the starting coordinates of rectangle,
-                # the coordinates are represented as tuples of two values i.e. (X coordinate value, Y coordinate value).
-                # End_point -> (x+w, y+h): It is the ending coordinates of rectangle,
-                # the coordinates are represented as tuples of two values i.e. (X coordinate value, Y coordinate value).
-                # Color -> (255, 0, 0): It is the color of border line of rectangle to be drawn,
-                # for BGR, we pass a tuple. eg: (255, 0, 0) for blue color.
-                # Thickness -> 2: It is the thickness of the rectangle border line in px,
-                # thickness of -1 px will fill the rectangle shape by the specified color.
-                # Also it's returning face.
-                face = (cv2.rectangle(frame, (x,y), (x+w,y+h), (255,0,255), 2))
-                # Now we are blurring face using medianBlur
-                face[y:y + h, x:x + h] = cv2.medianBlur(face[y:y + h, x:x + h], 35)
-            else:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 255), 2)
-
+        # If confidence is above value set on the beginning,
+        # then blur the bounding box (face) apply gaussian blur to this face
+        if confidence > MINIMUM_CONFIDENCE and BLUR_FACE:
+            # Applying rectangular on detected face
+            # Create a rectangle around a founded face.
+            # cv2.rectangle() Parameters:
+            # Image -> img: It is the image on which rectangle is to be drawn.
+            # Start_point -> (x, y): It is the starting coordinates of rectangle,
+            # the coordinates are represented as tuples of two values i.e. (X coordinate value, Y coordinate value).
+            # End_point -> (x+w, y+h): It is the ending coordinates of rectangle,
+            # the coordinates are represented as tuples of two values i.e. (X coordinate value, Y coordinate value).
+            # Color -> (255, 0, 0): It is the color of border line of rectangle to be drawn,
+            # for BGR, we pass a tuple. eg: (255, 0, 0) for blue color.
+            # Thickness -> 2: It is the thickness of the rectangle border line in px,
+            # thickness of -1 px will fill the rectangle shape by the specified color.
+            # Also it's returning face.
+            cv2.rectangle(frame, (start_x, start_y), (end_x, end_y), (255, 0, 255), 2)
+            # Blurring
+            face = cv2.GaussianBlur(face, (kernel_width, kernel_height), 50)
             if SHOW_CONFIDENCE:
-                cv2.putText(frame, f"{int(detection.score[0]*100)}%", (x, y-20), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 2)
+                cv2.putText(frame, f"{int(confidence*100)}%", (start_x, start_y-20), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 2)
 
-    # Calcute FPS
+        elif confidence > MINIMUM_CONFIDENCE and not BLUR_FACE:
+            # Applying rectangular on detected face
+            cv2.rectangle(frame, (start_x, start_y), (end_x, end_y), (255, 0, 255), 2)
+            if SHOW_CONFIDENCE:
+                cv2.putText(frame, f"{int(confidence * 100)}%", (start_x, start_y - 20), cv2.FONT_HERSHEY_PLAIN, 3,
+                            (255, 0, 255), 2)
+
+        # put the blurred face into the original image
+        frame[start_y: end_y, start_x: end_x] = face
+
+    # Calculate FPS
     currentTime = time.time()
-    fps = 1/(currentTime-previousTime)
+    fps = 1 / (currentTime - previousTime)
     previousTime = currentTime
     if SHOW_FPS:
-        cv2.putText(frame,f"fps{int(fps)}", (20,70), cv2.FONT_HERSHEY_PLAIN, 3, (255,255,0),2)
+        cv2.putText(frame, f"fps{int(fps)}", (20, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 0), 3)
+
     cv2.imshow('Face Anonymization', frame)
 
     # The function responsible for waiting for a key to be pressed in order not to close the window with the frame.
@@ -77,3 +100,6 @@ while True:
 # Release the VideoCapture object
 captured_video.release()
 cv2.destroyAllWindows()
+
+# Code above was made with help of this website:
+# https://www.thepythoncode.com/article/blur-faces-in-images-using-opencv-in-python
