@@ -1,3 +1,4 @@
+# This file uses mediapipe for face detection.
 import cv2
 import mediapipe as mp
 import time
@@ -8,11 +9,9 @@ SHOW_FPS = True
 BLUR_FACE = True
 MINIMUM_CERTANITY = 0.5
 
-# From now we will be using mediapipe instead of haarcascade.
-
 # Here the image is loaded for the test of correct operation
 # VideoCapture() takes filename as argument or you can type device index.
-captured_video = cv2.VideoCapture(0,0)
+captured_video = cv2.VideoCapture(0)
 
 # Defining initial value for previousTIme (this is necessary for FPS)
 previousTime = 0
