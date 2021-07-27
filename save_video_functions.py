@@ -31,7 +31,7 @@ def get_dims(cap, res='1080p'):
 VIDEO_TYPE = {
     'avi': cv2.VideoWriter_fourcc(*'XVID'),
     #'mp4': cv2.VideoWriter_fourcc(*'H264'),
-    'mp4': cv2.VideoWriter_fourcc(*'MP4V'),
+    'mp4': cv2.VideoWriter_fourcc(*'XVID'),
 }
 
 def get_video_type(filename):
@@ -39,3 +39,7 @@ def get_video_type(filename):
     if ext in VIDEO_TYPE:
       return  VIDEO_TYPE[ext]
     return VIDEO_TYPE['avi']
+
+
+# Saving video have been added with help of:
+# https://www.codingforentrepreneurs.com/blog/how-to-record-video-in-opencv-python/

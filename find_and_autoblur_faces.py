@@ -11,9 +11,9 @@ def get_preprocessed_frames(path=0,min_confidence = 0.4, show_confidence = True,
     start_time = time.time()
 
     # The most important variables regarding the output video
-    filename = "autoblur"+path
+    filename = "autoblur.mp4"
     frames_per_second = 24
-    res = '720p'
+    res = '1080p'
 
     # Variables responsible for counting frames in the video.
     number_of_frames = 0
@@ -33,7 +33,7 @@ def get_preprocessed_frames(path=0,min_confidence = 0.4, show_confidence = True,
 
     # Here the image is loaded for the test of correct operation
     # VideoCapture() takes filename as argument or you can type device index.
-    captured_video = cv2.VideoCapture(path)
+    captured_video = cv2.VideoCapture('test_video.mp4')
 
     out = cv2.VideoWriter(filename, save_video_functions.get_video_type(filename), frames_per_second, save_video_functions.get_dims(captured_video, res))
 
@@ -124,11 +124,13 @@ def get_preprocessed_frames(path=0,min_confidence = 0.4, show_confidence = True,
             break
     # Release the VideoCapture object
     captured_video.release()
-    out.release()
+    # out.release()
     if show_video:
         cv2.destroyAllWindows()
 
     final_info = f"Process done, founded {number_of_frames} frames (this took {round((time.time() - start_time),2)} seconds)"
+    file_save_info = f"File saved as {filename}"
     print(colored(final_info, 'green'))
+    print(colored(file_save_info, 'blue'))
 # Code above was made with help of this website:
 # https://www.thepythoncode.com/article/blur-faces-in-images-using-opencv-in-python
