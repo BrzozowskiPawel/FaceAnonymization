@@ -6,7 +6,7 @@ import time
 from termcolor import colored
 import save_video_functions
 
-def get_preprocessed_frames(path=0,min_confidence = 0.4, show_confidence = True, show_fps = True, blur_face = True, show_video = True):
+def blur_faces_using_ssd_model_save_as_video(path=0,min_confidence = 0.4, show_confidence = True, show_fps = True, blur_face = True, show_video = True):
     # Start counting the time it took to complete this function
     start_time = time.time()
 
@@ -28,8 +28,6 @@ def get_preprocessed_frames(path=0,min_confidence = 0.4, show_confidence = True,
     model_path = "weights/res10_300x300_ssd_iter_140000_fp16.caffemodel"
     # Loading model, method that takes the model architecture and weights as arguments:
     model = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
-
-    # Create a variable that holds all the frames. It will be returned from this function.
 
     # Here the image is loaded for the test of correct operation
     # VideoCapture() takes filename as argument or you can type device index.
