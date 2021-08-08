@@ -19,6 +19,7 @@ def create_folder_for_frames(path):
 
     # If folder doesn't exist, then create it.
     if not CHECK_FOLDER:
+        # TODO don't create folder if folder exists
         os.makedirs(MYDIR_before)
         os.makedirs(MYDIR_after)
         os.makedirs(MYDIR_video)
