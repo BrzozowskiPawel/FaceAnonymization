@@ -12,11 +12,16 @@ def create_folder_for_frames(path):
     folder_path = tmp.replace(".mp4", "")
 
     MYDIR = "output/"+folder_path
+    MYDIR_before = "output/"+folder_path+"_before"
+    MYDIR_after = "output/"+folder_path+"_after"
+    MYDIR_video = "output/"+folder_path+"_video_blurred"
     CHECK_FOLDER = os.path.isdir(MYDIR)
 
     # If folder doesn't exist, then create it.
     if not CHECK_FOLDER:
-        os.makedirs(MYDIR)
+        os.makedirs(MYDIR_before)
+        os.makedirs(MYDIR_after)
+        os.makedirs(MYDIR_video)
         message = "created folder : "+MYDIR
         print(colored(message, 'green'))
         return MYDIR
@@ -47,7 +52,7 @@ def divide_video_into_frames(path=0):
         success, frame = captured_video.read()
 
         if success:
-            cv2.imwrite(folder_path+"/"+str(number_of_frame)+".jpg", frame)
+            cv2.imwrite(folder_path+"_before/"+str(number_of_frame)+".jpg", frame)
             number_of_frame += 1
         elif not success:
             final_info = f"Process done, founded (this took {round((time.time() - start_time), 2)} seconds)"

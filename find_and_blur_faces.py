@@ -27,7 +27,7 @@ def draw_blur(image, bboxes):
 
 
 def find_and_blur_faces(folder_path):
-    impaths = folder_path
+    impaths = folder_path+"_before"
     impaths = glob.glob(os.path.join(impaths, "*.jpg"))
     detector = face_detection.build_detector(
         "DSFDDetector",
@@ -44,8 +44,6 @@ def find_and_blur_faces(folder_path):
         print(f"Detection time: {time.time() - t:.3f}")
         draw_blur(im, dets)
         imname = os.path.basename(impath).split(".")[0]
-        output_path = os.path.join(
-            os.path.dirname(impath),
-            f"{imname}_out.jpg"
-        )
+        output_path = folder_path+"_after/"+f"{imname}_out.jpg"
+        print(f"saved in {output_path}")
         cv2.imwrite(output_path, im)
