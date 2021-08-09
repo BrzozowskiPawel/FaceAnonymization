@@ -36,7 +36,6 @@ def divide_video_into_frames(path):
     # Creating variable that contain path to the folder
     folder_path = create_folder_for_frames(path)
 
-    print(f'inside folder path: {folder_path}')
     # Variables responsible for counting frames in the video.
     number_of_frame = 1
 
@@ -53,7 +52,7 @@ def divide_video_into_frames(path):
             cv2.imwrite(folder_path+"/before/"+str(number_of_frame)+".jpg", frame)
             number_of_frame += 1
         elif not success:
-            final_info = f"Process done, founded (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames in folder: {folder_path}"
+            final_info = f"Process done (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames in folder: {folder_path+'/before/'}"
             print(colored(final_info, 'green'))
             break
     return folder_path

@@ -4,7 +4,7 @@ import cv2
 import time
 import face_detection
 from termcolor import colored
-
+import datetime
 
 def draw_blur(image, bboxes):
     # get width and height of the image
@@ -28,7 +28,7 @@ def draw_blur(image, bboxes):
 
 
 def find_and_blur_faces(folder_path):
-    print("Please keep in mind that due to different kind of hardware there could be warnings.")
+    print("Blurring started. Please keep in mind that due to different kinds of hardware there could be warnings.")
     impaths = folder_path+"/before"
     impaths = glob.glob(os.path.join(impaths, "*.jpg"))
     detector = face_detection.build_detector(
@@ -36,8 +36,7 @@ def find_and_blur_faces(folder_path):
         max_resolution=1080
     )
 
-    number_of_files_before = len(os.listdir(folder_path + "/before"))
-
+    number_of_files_before = len(os.listdir(folder_path + "/before/"))
     for index in range(number_of_files_before-1):
         image_path = folder_path+"/before/"+str(index+1)+".jpg"
 
@@ -49,7 +48,10 @@ def find_and_blur_faces(folder_path):
         image_name = os.path.basename(image_path).split(".")[0]
         output_path = folder_path + "/after/" + f"{image_name}_out.jpg"
         cv2.imwrite(output_path, img)
-        print(f"File: {image_name}_out.jpg saved in {output_path}, detection time: {time.time() - t:.2f} seconds")
+
+        number_of_files_after = len(os.listdir(folder_path + "/after/"))
+        percentage_done = (round((number_of_files_after/number_of_files_before)*100, 2))
+        print(f"File: {image_name}_out.jpg saved in {output_path}, detection time: {time.time() - t:.2f} seconds. {percentage_done}% done.")
 
     print(colored("All photos blurred :) ", 'green'))
 
