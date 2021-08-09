@@ -5,24 +5,21 @@ from termcolor import colored
 
 
 def create_folder_for_frames(path):
-    # TODO add functionality that check if extension is mp4 and make different name for folder if it allready exist
     # Cutting .mp4 as folder should be only name of file.
-    print(colored("Files should be in mp4 format", 'red'))
     tmp = path.replace("input/","")
     folder_path = tmp.replace(".mp4", "")
 
     MYDIR = "output/"+folder_path
     MYDIR_before = "output/"+folder_path+"_before"
     MYDIR_after = "output/"+folder_path+"_after"
-    MYDIR_video = "output/"+folder_path+"_video_blurred"
     CHECK_FOLDER = os.path.isdir(MYDIR)
 
     # If folder doesn't exist, then create it.
     if not CHECK_FOLDER:
-        # TODO don't create folder if folder exists
-        os.makedirs(MYDIR_before)
-        os.makedirs(MYDIR_after)
-        os.makedirs(MYDIR_video)
+        if not os.path.isdir(MYDIR_before):
+            os.makedirs(MYDIR_before)
+        if not os.path.isdir(MYDIR_after):
+            os.makedirs(MYDIR_after)
         message = "created folder : "+MYDIR
         print(colored(message, 'green'))
         return MYDIR
@@ -33,7 +30,8 @@ def create_folder_for_frames(path):
         # If folder already exist we are exiting program with code 10.
         exit(10)
 
-def divide_video_into_frames(path=0):
+
+def divide_video_into_frames(path):
     # Start counting the time it took to complete this function
     start_time = time.time()
 
@@ -56,7 +54,7 @@ def divide_video_into_frames(path=0):
             cv2.imwrite(folder_path+"_before/"+str(number_of_frame)+".jpg", frame)
             number_of_frame += 1
         elif not success:
-            final_info = f"Process done, founded (this took {round((time.time() - start_time), 2)} seconds)"
+            final_info = f"Process done, founded (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames)"
             print(colored(final_info, 'green'))
             break
     return folder_path

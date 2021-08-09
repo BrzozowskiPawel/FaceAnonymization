@@ -51,5 +51,5 @@ def find_and_blur_faces(folder_path):
         cv2.imwrite(output_path, img)
         print(f"File: {image_name}_out.jpg saved in {output_path}, detection time: {time.time() - t:.2f} seconds")
 
-    print(colored("All files blurred", 'green'))
+    print(colored("All photos blurred :) ", 'green'))
 
