@@ -10,8 +10,8 @@ def create_folder_for_frames(path):
     folder_path = tmp.replace(".mp4", "")
 
     MYDIR = "output/"+folder_path
-    MYDIR_before = "output/"+folder_path+"_before"
-    MYDIR_after = "output/"+folder_path+"_after"
+    MYDIR_before = "output/"+folder_path+"/before"
+    MYDIR_after = "output/"+folder_path+"/after"
     CHECK_FOLDER = os.path.isdir(MYDIR)
 
     # If folder doesn't exist, then create it.
@@ -20,12 +20,10 @@ def create_folder_for_frames(path):
             os.makedirs(MYDIR_before)
         if not os.path.isdir(MYDIR_after):
             os.makedirs(MYDIR_after)
-        message = "created folder : "+MYDIR
-        print(colored(message, 'green'))
         return MYDIR
 
     else:
-        message = "folder already exists. "+MYDIR
+        message = "folder already exists! -> Delete 'output' folder or single one that already exists: "+MYDIR
         print(colored(message, 'red'))
         # If folder already exist we are exiting program with code 10.
         exit(10)
@@ -38,6 +36,7 @@ def divide_video_into_frames(path):
     # Creating variable that contain path to the folder
     folder_path = create_folder_for_frames(path)
 
+    print(f'inside folder path: {folder_path}')
     # Variables responsible for counting frames in the video.
     number_of_frame = 1
 
@@ -51,10 +50,10 @@ def divide_video_into_frames(path):
         success, frame = captured_video.read()
 
         if success:
-            cv2.imwrite(folder_path+"_before/"+str(number_of_frame)+".jpg", frame)
+            cv2.imwrite(folder_path+"/before/"+str(number_of_frame)+".jpg", frame)
             number_of_frame += 1
         elif not success:
-            final_info = f"Process done, founded (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames)"
+            final_info = f"Process done, founded (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames in folder: {folder_path}"
             print(colored(final_info, 'green'))
             break
     return folder_path

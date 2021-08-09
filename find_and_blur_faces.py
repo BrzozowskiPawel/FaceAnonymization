@@ -29,17 +29,17 @@ def draw_blur(image, bboxes):
 
 def find_and_blur_faces(folder_path):
     print("Please keep in mind that due to different kind of hardware there could be warnings.")
-    impaths = folder_path+"_before"
+    impaths = folder_path+"/before"
     impaths = glob.glob(os.path.join(impaths, "*.jpg"))
     detector = face_detection.build_detector(
         "DSFDDetector",
         max_resolution=1080
     )
 
-    number_of_files_before = len(os.listdir(folder_path + "_before"))
+    number_of_files_before = len(os.listdir(folder_path + "/before"))
 
     for index in range(number_of_files_before-1):
-        image_path = folder_path+"_before/"+str(index+1)+".jpg"
+        image_path = folder_path+"/before/"+str(index+1)+".jpg"
 
         img = cv2.imread(image_path)
         t = time.time()
@@ -47,7 +47,7 @@ def find_and_blur_faces(folder_path):
         draw_blur(img, dets)
 
         image_name = os.path.basename(image_path).split(".")[0]
-        output_path = folder_path + "_after/" + f"{image_name}_out.jpg"
+        output_path = folder_path + "/after/" + f"{image_name}_out.jpg"
         cv2.imwrite(output_path, img)
         print(f"File: {image_name}_out.jpg saved in {output_path}, detection time: {time.time() - t:.2f} seconds")
 
