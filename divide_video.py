@@ -9,12 +9,13 @@ def create_folder_for_frames(path):
     tmp = path.replace("input/","")
     folder_path = tmp.replace(".mp4", "")
 
+    # Declaration of constants that are paths.
     MYDIR = "output/"+folder_path
     MYDIR_before = "output/"+folder_path+"/before"
     MYDIR_after = "output/"+folder_path+"/after"
     CHECK_FOLDER = os.path.isdir(MYDIR)
 
-    # If folder doesn't exist, then create it.
+    # If folder doesn't exist, then create it (and subfolders).
     if not CHECK_FOLDER:
         if not os.path.isdir(MYDIR_before):
             os.makedirs(MYDIR_before)
@@ -48,11 +49,12 @@ def divide_video_into_frames(path):
         # This function returns 2 variables: 1. is flag if frame was read correctly, 2. is frame
         success, frame = captured_video.read()
 
+        # Save the photo as consecutive numbers.
         if success:
             cv2.imwrite(folder_path+"/before/"+str(number_of_frame)+".jpg", frame)
             number_of_frame += 1
         elif not success:
-            final_info = f"Process done (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames in folder: {folder_path+'/before/'}"
+            final_info = f"Process done (this took {round((time.time() - start_time), 2)} seconds), created {number_of_frame} frames from video in folder: {folder_path+'/before/'}"
             print(colored(final_info, 'green'))
             break
     return folder_path

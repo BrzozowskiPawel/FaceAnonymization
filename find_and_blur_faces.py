@@ -4,7 +4,6 @@ import cv2
 import time
 import face_detection
 from termcolor import colored
-import datetime
 
 def draw_blur(image, bboxes):
     # get width and height of the image
@@ -14,6 +13,7 @@ def draw_blur(image, bboxes):
     kernel_height = (h // 7) | 1
 
     for bbox in bboxes:
+        # Points representing the area in which the face is located
         x0, y0, x1, y1 = [int(_) for _ in bbox]
 
         # get the face image
@@ -29,14 +29,19 @@ def draw_blur(image, bboxes):
 
 def find_and_blur_faces(folder_path):
     print("Blurring started. Please keep in mind that due to different kinds of hardware there could be warnings.")
-    impaths = folder_path+"/before"
-    impaths = glob.glob(os.path.join(impaths, "*.jpg"))
+
+    # Creating a detector
     detector = face_detection.build_detector(
         "DSFDDetector",
         max_resolution=1080
     )
 
+    # Information on how many files are in the folder "/.../before/
     number_of_files_before = len(os.listdir(folder_path + "/before/"))
+
+    # The following code is responsible for reading successive frames of the film,
+    # determining where the face is using the DSFDDetector and then using Gaussian blur to blur the face.
+    # Finally, information about the course of the entire process for a given frame is displayed.
     for index in range(number_of_files_before-1):
         image_path = folder_path+"/before/"+str(index+1)+".jpg"
 
