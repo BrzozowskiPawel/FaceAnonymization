@@ -20,9 +20,11 @@ During the creation of the program, various types of face detection methods were
 
 ## Demo
 Below we present a single frame of the free movie:
+<br />
 <img src="readme-files/1.jpg" alt="before" width="300"/>
 
 The results obtained after starting the program are displayed here:
+<br />
 <img src="readme-files/1_out.jpg" alt="after" width="300"/>
 
 ## How to use program
