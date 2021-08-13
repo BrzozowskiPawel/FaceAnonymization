@@ -28,6 +28,6 @@ The results obtained after starting the program are displayed here:
 <img src="readme-files/1_out.jpg" alt="after" width="300"/>
 
 ## How to use program
-- Please put all interesting movies into the input folder.
+- Please put all videos into the input folder.
 - Please run main.py
-- The program creates an output folder. Then, for each file with the .mp4 extension, a subfolder will be created and in it another 2 subfolders (before and after). The before folder contains the movie divided into frames. The after folder contains movie frames with blurred faces.
+- The program creates an output folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). The before folder contains the video divided into frames. The after folder contains video frames with blurred faces.
