@@ -15,7 +15,7 @@ A program for turning a movie into individual frames and blurring the faces of p
 This program was created to enable the creation of a database for the needs of Engineering Thesis.
 The topic is the detection of cyclists in a video image using artificial intelligence.
 However, due to the protection of personal data, the faces of all persons in the video (video frames) must be blurred.
-Face recognition is based on DSFD. In this project, we use the ready-made [face-detection](https://pypi.org/project/face-detection/) package.
+Face recognition is based on DSFD. In this project, we use the [face-detection](https://pypi.org/project/face-detection/) package.
 During the creation of the program, various types of face detection methods were used, only after using DSFD the effects were satisfactory.
 
 ## Demo
