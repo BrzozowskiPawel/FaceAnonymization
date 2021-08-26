@@ -1,6 +1,6 @@
 # Face Anonymization
 
-A program for turning a movie into individual frames and blurring the faces of people appearing in it.
+A program for turning a video into individual frames and blurring the faces of people appearing in it.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ Face recognition is based on DSFD. In this project, we use the [face-detection](
 During the creation of the program, various types of face detection methods were used, only after using DSFD the effects were satisfactory.
 
 ## Demo
-Below we present a single frame of the free movie:
+Below we present a single frame of the free video:
 <br />
 <img src="readme-files/1.jpg" alt="before" width="300"/>
 
