@@ -38,4 +38,6 @@ pip3 install opencv-python termcolor face_detection
 6. Please put all videos into the input folder.
 7. Please run main.py
 
-The program creates an output folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). The before folder contains the video divided into frames. The after folder contains video frames with blurred faces.
+The program creates an output folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). 
+- before folder contains the video divided into frames. 
+- after folder contains video frames with blurred faces.
