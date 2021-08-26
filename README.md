@@ -33,7 +33,7 @@ The results obtained after starting the program are displayed here:
 3. Go to the folder where you unpacked this project.
 4. Install all requaired modules: ```cv2, termcolor, face_detection```.
 ```
-pip3 install install opencv-python / pip3 install termcolor / pip3 install face_detection
+pip3 install opencv-python termcolor face_detection
 ```
 6. Please put all videos into the input folder.
 7. Please run main.py
