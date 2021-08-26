@@ -8,6 +8,8 @@ A program for turning a movie into individual frames and blurring the faces of p
 
 - [Demo](#demo)
 
+- [Installation](#installation)
+
 - [How to use program](#how-to-use-program)
 
 ## Description
@@ -27,7 +29,7 @@ The results obtained after starting the program are displayed here:
 <br />
 <img src="readme-files/1_out.jpg" alt="after" width="300"/>
 
-## How to use program
+## Installation
 1. Clone the repository.
 2. Unzip project.
 3. Go to the folder where you unpacked this project.
@@ -35,9 +37,13 @@ The results obtained after starting the program are displayed here:
 ```
 pip3 install opencv-python termcolor face_detection
 ```
-6. Please put all videos into the input folder.
+6. <b> Please put all videos into the input folder (before starting program). </b>
 7. Please run main.py
 
-The program creates an output folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). 
-- before folder contains the video divided into frames. 
-- after folder contains video frames with blurred faces.
+
+## How to use program
+First, you have to put all videos that you want to divide into frames and blur faces into <b>input</b> folder. </br>Then you have to start programming in the IDE or by using a command <b>python3 main.py</b>. After that program automatically detect all videos in <b>input</b> folder and do blurring and slicing.
+
+The program creates an <b>output</b> folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). 
+- <b>before</b> folder contains the video divided into frames. 
+- <b>after</b> folder contains video frames with blurred faces.
