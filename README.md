@@ -42,7 +42,7 @@ pip3 install opencv-python termcolor face_detection
 
 
 ## How to use program
-First, you have to put all videos that you want to divide into frames and blur faces into <b>input</b> folder. </br>Then you have to start programming in the IDE or by using a command ```python3 main.py```. After that program automatically detect all videos in <b>input</b> folder and do blurring and slicing.
+First, you have to put all videos that you want to divide into frames and blur faces into <b>input</b> folder. </br>Then you have to start programming in the IDE or by using a command ```python3 main.py```.</br> After that program automatically detect all videos in <b>input</b> folder and do blurring and slicing.
 
 The program creates an <b>output</b> folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). 
 - <b>before</b> folder contains the video divided into frames. 
