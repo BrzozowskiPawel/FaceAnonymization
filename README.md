@@ -31,8 +31,11 @@ The results obtained after starting the program are displayed here:
 1. Clone the repository.
 2. Unzip project.
 3. Go to the folder where you unpacked this project.
-4. Install all requaired modules.
-5. Please put all videos into the input folder.
-6. Please run main.py
+4. Install all requaired modules: ```cv2, termcolor, face_detection```.
+```
+pip3 install install opencv-python / pip3 install termcolor / pip3 install face_detection
+```
+6. Please put all videos into the input folder.
+7. Please run main.py
 
 The program creates an output folder. Then, for each file with the .mp4 extension, a subfolder will be created and inside it another 2 subfolders (before and after). The before folder contains the video divided into frames. The after folder contains video frames with blurred faces.
